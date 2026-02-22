@@ -17,7 +17,12 @@
                     opt.Password.RequireNonAlphanumeric = false;
                 })
                 .AddRoles<IdentityRole<Guid>>()
+                .AddSignInManager()
                 .AddEntityFrameworkStores<AppDbContext>();
+
+            //TODO: Adapters (hexagonal)(Extraer a un metodo addServices?)
+            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<ITokenService, JwtTokenService>();
 
             return services;
         }
