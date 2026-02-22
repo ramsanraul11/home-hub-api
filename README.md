@@ -8,10 +8,13 @@
 - [x] Swagger + CORS dev
 
 ### Fase 1 — Core Hogar (MVP)
-- [ ] Households: crear hogar + listar mis hogares
-- [ ] Members: añadir miembros (manual) + roles (Owner/Admin/Member)
-- [ ] Autorización por hogar (policy “IsHouseholdMember”)
-- [ ] Seed de datos mínimo (opcional)
+- [x] Households: crear hogar + listar mis hogares
+- [x] Members: añadir miembros (manual) + roles (Owner/Admin/Member)
+- [x] Autorización por hogar (policy “IsHouseholdMember”)
+- [x] Seed de datos mínimo (opcional)
+- [ ] GET /households/{householdId}/members (lista miembros + roles)
+- [ ] PATCH /households/{householdId}/members/{memberId} (cambiar rol)
+- [ ] DELETE /households/{householdId}/members/{memberId} (expulsar)
 
 ### Fase 2 — Tareas del hogar (MVP)
 - [ ] CRUD TaskItem (por hogar)
