@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: homehub-postgres
+    environment:
+      POSTGRES_DB: homehub
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - homehub_pgdata:/var/lib/postgresql/data
+
+volumes:
+  homehub_pgdata:
