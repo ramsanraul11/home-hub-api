@@ -6,6 +6,8 @@
         {
             services.AddScoped<RegisterHandler>();
             services.AddScoped<LoginHandler>();
+            services.AddScoped<RefreshHandler>();
+            services.AddScoped<LogoutHandler>();
             return services;
         }
     }

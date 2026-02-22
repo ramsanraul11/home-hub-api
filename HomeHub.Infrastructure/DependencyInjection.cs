@@ -24,6 +24,8 @@
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<ITokenService, JwtTokenService>();
 
+            services.AddScoped<IRefreshTokenStore, RefreshTokenStore>();
+
             return services;
         }
     }
