@@ -39,5 +39,17 @@
                 .AnyAsync(m => m.HouseholdId == householdId && m.UserId == userId && m.Status == MemberStatus.Active, ct);
 
         public Task SaveChangesAsync(CancellationToken ct) => _db.SaveChangesAsync(ct);
+
+        public async Task<HouseholdRole?> GetRoleForUserAsync(Guid householdId, Guid userId, CancellationToken ct)
+        {
+            var m = await _db.HouseholdMembers.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.HouseholdId == householdId && x.UserId == userId && x.Status == MemberStatus.Active, ct);
+
+            return m is null ? null : m.Role;
+        }
+
+        public Task<bool> MemberExistsAsync(Guid householdId, Guid userId, CancellationToken ct)
+            => _db.HouseholdMembers.AsNoTracking()
+                .AnyAsync(x => x.HouseholdId == householdId && x.UserId == userId && x.Status == MemberStatus.Active, ct);
     }
 }

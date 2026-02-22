@@ -4,6 +4,7 @@ global using HomeHub.Application.Auth.Commands.Refresh;
 global using HomeHub.Application.Auth.Commands.Register;
 global using HomeHub.Application.Auth.Ports;
 global using HomeHub.Application.Common;
+global using HomeHub.Application.Households.Commands.AddMember;
 global using HomeHub.Application.Households.Commands.CreateHousehold;
 global using HomeHub.Application.Households.Ports;
 global using HomeHub.Application.Households.Queries.GetHousehold;

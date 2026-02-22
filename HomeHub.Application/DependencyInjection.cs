@@ -11,6 +11,7 @@
             services.AddScoped<CreateHouseholdHandler>();
             services.AddScoped<ListMyHouseholdsHandler>();
             services.AddScoped<GetHouseholdHandler>();
+            services.AddScoped<AddMemberHandler>();
             return services;
         }
     }

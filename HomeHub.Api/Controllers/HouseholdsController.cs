@@ -1,6 +1,4 @@
-﻿using HomeHub.Application.Households.Queries.GetHousehold;
-
-namespace HomeHub.Api.Controllers
+﻿namespace HomeHub.Api.Controllers
 {
     [ApiController]
     [Route("households")]
@@ -34,6 +32,19 @@ namespace HomeHub.Api.Controllers
         {
             var dto = await handler.Handle(householdId, ct);
             return dto is null ? NotFound() : Ok(dto);
+        }
+
+        [HttpPost("{householdId:guid}/members")]
+        [Authorize(Policy = "HouseholdAdminOrOwner")]
+        public async Task<IActionResult> AddMember(
+            [FromRoute] Guid householdId,
+            [FromServices] AddMemberHandler handler,
+            [FromBody] AddMemberCommand cmd,
+            CancellationToken ct)
+        {
+            var actorUserId = CurrentUser.GetUserId(User);
+            var res = await handler.Handle(householdId, actorUserId, cmd, ct);
+            return res.IsSuccess ? Ok(res.Value) : BadRequest(res.Error);
         }
     }
 }

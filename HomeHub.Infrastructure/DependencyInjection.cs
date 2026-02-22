@@ -43,6 +43,7 @@
         {
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<ITokenService, JwtTokenService>();
+            services.AddScoped<IUserLookup, UserLookup>();
         }
     }
 }

@@ -72,6 +72,7 @@ builder.Services
 
 
 builder.Services.AddScoped<IAuthorizationHandler, HouseholdMemberHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, HouseholdAdminOrOwnerHandler>();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -80,6 +81,7 @@ builder.Services.AddAuthorization(options =>
         policy.RequireAuthenticatedUser();
         policy.AddRequirements(new HouseholdMemberRequirement());
     });
+    options.AddPolicy("HouseholdAdminOrOwner", p => { p.RequireAuthenticatedUser(); p.AddRequirements(new HouseholdAdminOrOwnerRequirement()); });
 });
 
 var app = builder.Build();

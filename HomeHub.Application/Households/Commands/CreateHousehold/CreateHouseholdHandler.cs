@@ -1,6 +1,4 @@
-﻿using HomeHub.Application.Households.Ports;
-
-namespace HomeHub.Application.Households.Commands.CreateHousehold
+﻿namespace HomeHub.Application.Households.Commands.CreateHousehold
 {
     public sealed class CreateHouseholdHandler
     {

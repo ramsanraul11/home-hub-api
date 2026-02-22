@@ -10,5 +10,7 @@
 
         Task<bool> IsMemberAsync(Guid householdId, Guid userId, CancellationToken ct);
         Task SaveChangesAsync(CancellationToken ct);
+        Task<HouseholdRole?> GetRoleForUserAsync(Guid householdId, Guid userId, CancellationToken ct);
+        Task<bool> MemberExistsAsync(Guid householdId, Guid userId, CancellationToken ct);
     }
 }
