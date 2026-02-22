@@ -8,6 +8,8 @@
             services.AddScoped<LoginHandler>();
             services.AddScoped<RefreshHandler>();
             services.AddScoped<LogoutHandler>();
+            services.AddScoped<CreateHouseholdHandler>();
+            services.AddScoped<ListMyHouseholdsHandler>();
             return services;
         }
     }
