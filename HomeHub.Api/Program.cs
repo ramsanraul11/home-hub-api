@@ -70,7 +70,17 @@ builder.Services
         };
     });
 
-builder.Services.AddAuthorization();
+
+builder.Services.AddScoped<IAuthorizationHandler, HouseholdMemberHandler>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("HouseholdMember", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.AddRequirements(new HouseholdMemberRequirement());
+    });
+});
 
 var app = builder.Build();
 

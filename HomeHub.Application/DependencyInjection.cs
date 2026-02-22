@@ -10,6 +10,7 @@
             services.AddScoped<LogoutHandler>();
             services.AddScoped<CreateHouseholdHandler>();
             services.AddScoped<ListMyHouseholdsHandler>();
+            services.AddScoped<GetHouseholdHandler>();
             return services;
         }
     }

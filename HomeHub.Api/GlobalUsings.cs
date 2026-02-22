@@ -7,6 +7,7 @@ global using HomeHub.Application.Auth.Commands.Logout;
 global using HomeHub.Application.Auth.Commands.Refresh;
 global using HomeHub.Application.Auth.Commands.Register;
 global using HomeHub.Application.Households.Commands.CreateHousehold;
+global using HomeHub.Application.Households.Ports;
 global using HomeHub.Application.Households.Queries.ListMyHouseholds;
 global using HomeHub.Infrastructure;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;

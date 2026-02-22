@@ -6,6 +6,7 @@ global using HomeHub.Application.Auth.Ports;
 global using HomeHub.Application.Common;
 global using HomeHub.Application.Households.Commands.CreateHousehold;
 global using HomeHub.Application.Households.Ports;
+global using HomeHub.Application.Households.Queries.GetHousehold;
 global using HomeHub.Application.Households.Queries.ListMyHouseholds;
 global using HomeHub.Domain.Household;
 global using Microsoft.Extensions.DependencyInjection;
