@@ -6,6 +6,9 @@
         public DbSet<RefreshTokenEntity> RefreshTokens => Set<RefreshTokenEntity>();
         public DbSet<Household> Households => Set<Household>();
         public DbSet<HouseholdMember> HouseholdMembers => Set<HouseholdMember>();
+        public DbSet<TaskItem> Tasks => Set<TaskItem>();
+        public DbSet<TaskAssignment> TaskAssignments => Set<TaskAssignment>();
+
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

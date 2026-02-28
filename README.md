@@ -12,14 +12,14 @@
 - [x] Members: añadir miembros (manual) + roles (Owner/Admin/Member)
 - [x] Autorización por hogar (policy “IsHouseholdMember”)
 - [x] Seed de datos mínimo (opcional)
-- [ ] GET /households/{householdId}/members (lista miembros + roles)
-- [ ] PATCH /households/{householdId}/members/{memberId} (cambiar rol)
-- [ ] DELETE /households/{householdId}/members/{memberId} (expulsar)
+- [x] GET /households/{householdId}/members (lista miembros + roles)
+- [x] PATCH /households/{householdId}/members/{memberId} (cambiar rol)
+- [x] DELETE /households/{householdId}/members/{memberId} (expulsar)
 
 ### Fase 2 — Tareas del hogar (MVP)
-- [ ] CRUD TaskItem (por hogar)
-- [ ] Asignaciones (TaskAssignment)
-- [ ] Completar / reabrir tareas
+- [x] CRUD TaskItem (por hogar)
+- [x] Asignaciones (TaskAssignment)
+- [x] Completar
 - [ ] Filtros (estado, vencimiento, asignado)
 - [ ] Auditoría básica (CreatedAt/By)
 

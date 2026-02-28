@@ -14,6 +14,10 @@
             services.AddScoped<AddMemberHandler>();
             services.AddScoped<ListMembersHandler>();
             services.AddScoped<RemoveMemberHandler>();
+            services.AddScoped<CreateTaskHandler>();
+            services.AddScoped<ListTasksHandler>();
+            services.AddScoped<AssignTaskHandler>();
+            services.AddScoped<CompleteTaskHandler>();
             return services;
         }
     }

@@ -32,6 +32,7 @@
         private static void AddRepositories(IServiceCollection services)
         {
             services.AddScoped<IHouseholdRepository, HouseholdRepository>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
         }
 
         private static void AddStores(IServiceCollection services)
