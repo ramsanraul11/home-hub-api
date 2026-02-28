@@ -29,7 +29,7 @@
 
 ### Fase 4 — Compra/Inventario (MVP)
 - [x] Inventory: categorías + items + stock mínimo
-- [ ] ShoppingList: listas + items + marcar comprado
+- [x] ShoppingList: listas + items + marcar comprado
 - [x] Alertas de stock bajo (evento → notificación)
 
 ### Fase 5 — Notificaciones (v1)

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HomeHub.Domain.Shopping;
 
 namespace HomeHub.Infrastructure.Persistence
 {
@@ -15,6 +15,8 @@ namespace HomeHub.Infrastructure.Persistence
         public DbSet<InventoryItem> InventoryItems => Set<InventoryItem>();
         public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
         public DbSet<LowStockAlert> LowStockAlerts => Set<LowStockAlert>();
+        public DbSet<ShoppingList> ShoppingLists => Set<ShoppingList>();
+        public DbSet<ShoppingListItem> ShoppingListItems => Set<ShoppingListItem>();
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -46,7 +48,7 @@ namespace HomeHub.Infrastructure.Persistence
                 {
                     Id = Guid.NewGuid(),
                     OccurredAtUtc = ev.OccurredAtUtc,
-                    Type = ev.GetType().FullName!,
+                    Type = ev.GetType().AssemblyQualifiedName!,
                     PayloadJson = JsonSerializer.Serialize(ev, ev.GetType())
                 });
             }

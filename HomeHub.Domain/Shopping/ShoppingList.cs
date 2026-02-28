@@ -1,6 +1,6 @@
 ﻿namespace HomeHub.Domain.Shopping
 {
-    public sealed class ShoppingList
+    public sealed class ShoppingList : Entity
     {
         public Guid Id { get; private set; }
         public Guid HouseholdId { get; private set; }
@@ -25,6 +25,7 @@
             => new(Guid.NewGuid(), householdId, name, userId);
 
         public void Archive() => IsArchived = true;
+        public void Rename(string newName) => Name = newName.Trim();
     }
 }
 

@@ -1,4 +1,6 @@
-﻿namespace HomeHub.Infrastructure
+﻿using HomeHub.Infrastructure.Outbox.Handlers;
+
+namespace HomeHub.Infrastructure
 {
     public static class DependencyInjection
     {
@@ -36,6 +38,7 @@
             services.AddScoped<INoticeRepository, NoticeRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<ILowStockAlertRepository, LowStockAlertRepository>();
+            services.AddScoped<IShoppingRepository, ShoppingRepository>();
         }
 
         private static void AddStores(IServiceCollection services)
@@ -48,6 +51,12 @@
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<ITokenService, JwtTokenService>();
             services.AddScoped<IUserLookup, UserLookup>();
+
+            //Outbox handlers
+            services.AddScoped<IOutboxEventHandler, ShoppingItemAddedOutboxHandler>();
+            services.AddScoped<IOutboxEventHandler, ShoppingItemUpdatedOutboxHandler>();
+            services.AddScoped<IOutboxEventHandler, ShoppingItemDeletedOutboxHandler>();
+            services.AddScoped<IOutboxEventHandler, ShoppingItemBoughtStateChangedOutboxHandler>();
 
             //Background services
             services.AddHostedService<OutboxProcessorHostedService>();
