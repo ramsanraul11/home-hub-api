@@ -35,6 +35,7 @@
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<INoticeRepository, NoticeRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<ILowStockAlertRepository, LowStockAlertRepository>();
         }
 
         private static void AddStores(IServiceCollection services)
@@ -47,6 +48,9 @@
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<ITokenService, JwtTokenService>();
             services.AddScoped<IUserLookup, UserLookup>();
+
+            //Background services
+            services.AddHostedService<OutboxProcessorHostedService>();
         }
     }
 }

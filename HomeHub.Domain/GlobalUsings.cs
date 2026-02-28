@@ -1,1 +1,1 @@
-﻿
+﻿global using HomeHub.Domain.Common;
