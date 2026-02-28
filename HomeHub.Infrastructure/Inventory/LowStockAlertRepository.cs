@@ -15,6 +15,22 @@
             return Task.CompletedTask;
         }
 
+        public async Task<IReadOnlyList<LowStockAlert>> ListAsync(Guid householdId, bool? activeOnly, CancellationToken ct)
+        {
+            var q = _db.LowStockAlerts.AsNoTracking()
+                .Where(x => x.HouseholdId == householdId);
+
+            if (activeOnly == true)
+                q = q.Where(x => x.ResolvedAtUtc == null);
+
+            return await q
+                .OrderByDescending(x => x.TriggeredAtUtc)
+                .ToListAsync(ct);
+        }
+
+        public Task<LowStockAlert?> GetAsync(Guid householdId, Guid alertId, CancellationToken ct)
+            => _db.LowStockAlerts.FirstOrDefaultAsync(x => x.Id == alertId && x.HouseholdId == householdId, ct);
+
         public Task SaveChangesAsync(CancellationToken ct) => _db.SaveChangesAsync(ct);
     }
 }

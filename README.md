@@ -28,9 +28,9 @@
 - [x] Archivado + filtros por urgencia/fecha
 
 ### Fase 4 — Compra/Inventario (MVP)
-- [ ] Inventory: categorías + items + stock mínimo
+- [x] Inventory: categorías + items + stock mínimo
 - [ ] ShoppingList: listas + items + marcar comprado
-- [ ] Alertas de stock bajo (evento → notificación)
+- [x] Alertas de stock bajo (evento → notificación)
 
 ### Fase 5 — Notificaciones (v1)
 - [ ] Modelo Notifications + Deliveries

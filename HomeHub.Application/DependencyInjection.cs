@@ -29,6 +29,8 @@
             services.AddScoped<ListItemsHandler>();
             services.AddScoped<UpdateItemQuantityHandler>();
             services.AddScoped<LowStockAlertProjector>();
+            services.AddScoped<ListLowStockAlertsHandler>();
+            services.AddScoped<ResolveLowStockAlertHandler>();
             return services;
         }
     }
