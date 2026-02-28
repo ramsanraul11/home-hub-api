@@ -6,6 +6,7 @@ global using HomeHub.Application.Auth.Ports;
 global using HomeHub.Application.Common;
 global using HomeHub.Application.Households.Ports;
 global using HomeHub.Application.Tasks.Ports;
+global using HomeHub.Application.Tasks.Queries.ListTasks;
 global using HomeHub.Domain.Household;
 global using HomeHub.Domain.Tasks;
 global using HomeHub.Infrastructure.Auth;

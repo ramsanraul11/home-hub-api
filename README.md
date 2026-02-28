@@ -20,8 +20,8 @@
 - [x] CRUD TaskItem (por hogar)
 - [x] Asignaciones (TaskAssignment)
 - [x] Completar
-- [ ] Filtros (estado, vencimiento, asignado)
-- [ ] Auditoría básica (CreatedAt/By)
+- [x] Filtros (estado, vencimiento, asignado)
+- [x] Auditoría básica (CreatedAt/By)
 
 ### Fase 3 — Avisos (MVP)
 - [ ] CRUD Notice (por hogar)

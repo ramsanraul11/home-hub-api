@@ -1,5 +1,6 @@
 ﻿namespace HomeHub.Api.Controllers
 {
+    //TODO: Eliminar tareas
     [ApiController]
     [Authorize]
     public sealed class TasksController : ControllerBase
@@ -22,13 +23,25 @@
         [HttpGet("households/{householdId:guid}/tasks")]
         [Authorize(Policy = "HouseholdMember")]
         public async Task<IActionResult> List(
-            [FromRoute] Guid householdId,
-            [FromQuery] Domain.Tasks.TaskStatus? status,
-            [FromQuery] Guid? assignedUserId,
-            [FromServices] ListTasksHandler handler,
-            CancellationToken ct)
+        [FromRoute] Guid householdId,
+        [FromQuery] Domain.Tasks.TaskStatus? status,
+        [FromQuery] Guid? assignedUserId,
+        [FromQuery] DateTime? dueFromUtc,
+        [FromQuery] DateTime? dueToUtc,
+        [FromQuery] bool? overdue,
+        [FromServices] ListTasksHandler handler,
+        CancellationToken ct)
         {
-            var list = await handler.Handle(householdId, status, assignedUserId, ct);
+            var q = new ListTasksQuery(
+                HouseholdId: householdId,
+                Status: status,
+                AssignedUserId: assignedUserId,
+                DueFromUtc: dueFromUtc,
+                DueToUtc: dueToUtc,
+                Overdue: overdue
+            );
+
+            var list = await handler.Handle(q, ct);
             return Ok(list);
         }
 

@@ -14,29 +14,51 @@
         public Task<TaskItem?> GetByIdAsync(Guid taskId, CancellationToken ct)
             => _db.Tasks.FirstOrDefaultAsync(x => x.Id == taskId, ct);
 
-        public async Task<IReadOnlyList<TaskItem>> ListAsync(Guid householdId, Domain.Tasks.TaskStatus? status, Guid? assignedUserId, CancellationToken ct)
+        public async Task<IReadOnlyList<TaskItem>> ListAsync(ListTasksQuery q, CancellationToken ct)
         {
-            var q = _db.Tasks.AsNoTracking().Where(t => t.HouseholdId == householdId);
+            var query = _db.Tasks.AsNoTracking()
+                .Where(t => t.HouseholdId == q.HouseholdId);
 
-            if (status is not null)
-                q = q.Where(t => t.Status == status.Value);
+            if (q.Status is not null)
+                query = query.Where(t => t.Status == q.Status.Value);
 
-            if (assignedUserId is not null)
+            // Due range
+            if (q.DueFromUtc is not null)
+                query = query.Where(t => t.DueAtUtc != null && t.DueAtUtc >= q.DueFromUtc.Value);
+
+            if (q.DueToUtc is not null)
+                query = query.Where(t => t.DueAtUtc != null && t.DueAtUtc <= q.DueToUtc.Value);
+
+            // Overdue
+            if (q.Overdue == true)
             {
-                q = q.Join(
-                    _db.TaskAssignments.AsNoTracking().Where(a => a.UserId == assignedUserId.Value),
-                    t => t.Id,
-                    a => a.TaskItemId,
-                    (t, _) => t
+                var now = DateTime.UtcNow;
+                query = query.Where(t =>
+                    t.DueAtUtc != null &&
+                    t.DueAtUtc < now &&
+                    t.Status != Domain.Tasks.TaskStatus.Done &&
+                    t.Status != Domain.Tasks.TaskStatus.Cancelled
                 );
             }
 
-            return await q.OrderByDescending(t => t.CreatedAtUtc).ToListAsync(ct);
+            // Assigned user
+            if (q.AssignedUserId is not null)
+            {
+                var assigned = _db.TaskAssignments.AsNoTracking()
+                    .Where(a => a.UserId == q.AssignedUserId.Value);
+
+                query = query.Join(assigned, t => t.Id, a => a.TaskItemId, (t, _) => t);
+            }
+
+            return await query
+                .OrderBy(t => t.DueAtUtc == null)     // primero las que tienen due date
+                .ThenBy(t => t.DueAtUtc)
+                .ThenByDescending(t => t.CreatedAtUtc)
+                .ToListAsync(ct);
         }
 
         public Task<bool> IsAssignedToAsync(Guid taskId, Guid userId, CancellationToken ct)
-            => _db.TaskAssignments.AsNoTracking()
-                .AnyAsync(a => a.TaskItemId == taskId && a.UserId == userId, ct);
+            => _db.TaskAssignments.AsNoTracking().AnyAsync(a => a.TaskItemId == taskId && a.UserId == userId, ct);
 
         public Task AddAssignmentAsync(TaskAssignment assignment, CancellationToken ct)
         {

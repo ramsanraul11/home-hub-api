@@ -5,11 +5,7 @@
         Task AddAsync(TaskItem task, CancellationToken ct);
         Task<TaskItem?> GetByIdAsync(Guid taskId, CancellationToken ct);
 
-        Task<IReadOnlyList<TaskItem>> ListAsync(
-            Guid householdId,
-            Domain.Tasks.TaskStatus? status,
-            Guid? assignedUserId,
-            CancellationToken ct);
+        Task<IReadOnlyList<TaskItem>> ListAsync(ListTasksQuery query, CancellationToken ct);
 
         Task<bool> IsAssignedToAsync(Guid taskId, Guid userId, CancellationToken ct);
 
