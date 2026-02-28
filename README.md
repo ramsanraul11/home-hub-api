@@ -8,26 +8,29 @@
 - [x] Swagger + CORS dev
 
 ### Fase 1 — Core Hogar (MVP)
-- [ ] Households: crear hogar + listar mis hogares
-- [ ] Members: añadir miembros (manual) + roles (Owner/Admin/Member)
-- [ ] Autorización por hogar (policy “IsHouseholdMember”)
-- [ ] Seed de datos mínimo (opcional)
+- [x] Households: crear hogar + listar mis hogares
+- [x] Members: añadir miembros (manual) + roles (Owner/Admin/Member)
+- [x] Autorización por hogar (policy “IsHouseholdMember”)
+- [x] Seed de datos mínimo (opcional)
+- [x] GET /households/{householdId}/members (lista miembros + roles)
+- [x] PATCH /households/{householdId}/members/{memberId} (cambiar rol)
+- [x] DELETE /households/{householdId}/members/{memberId} (expulsar)
 
 ### Fase 2 — Tareas del hogar (MVP)
-- [ ] CRUD TaskItem (por hogar)
-- [ ] Asignaciones (TaskAssignment)
-- [ ] Completar / reabrir tareas
-- [ ] Filtros (estado, vencimiento, asignado)
-- [ ] Auditoría básica (CreatedAt/By)
+- [x] CRUD TaskItem (por hogar)
+- [x] Asignaciones (TaskAssignment)
+- [x] Completar
+- [x] Filtros (estado, vencimiento, asignado)
+- [x] Auditoría básica (CreatedAt/By)
 
 ### Fase 3 — Avisos (MVP)
-- [ ] CRUD Notice (por hogar)
-- [ ] Archivado + filtros por urgencia/fecha
+- [x] CRUD Notice (por hogar)
+- [x] Archivado + filtros por urgencia/fecha
 
 ### Fase 4 — Compra/Inventario (MVP)
-- [ ] Inventory: categorías + items + stock mínimo
+- [x] Inventory: categorías + items + stock mínimo
 - [ ] ShoppingList: listas + items + marcar comprado
-- [ ] Alertas de stock bajo (evento → notificación)
+- [x] Alertas de stock bajo (evento → notificación)
 
 ### Fase 5 — Notificaciones (v1)
 - [ ] Modelo Notifications + Deliveries

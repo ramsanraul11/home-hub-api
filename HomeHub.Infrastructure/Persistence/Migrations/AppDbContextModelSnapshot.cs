@@ -22,6 +22,296 @@ namespace HomeHub.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("HomeHub.Domain.Household.Household", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CurrencyCode")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAtUtc");
+
+                    b.ToTable("Household", (string)null);
+                });
+
+            modelBuilder.Entity("HomeHub.Domain.Household.HouseholdMember", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("HouseholdId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("JoinedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("LeftAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("HouseholdId", "Status");
+
+                    b.HasIndex("HouseholdId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("HouseholdMember", (string)null);
+                });
+
+            modelBuilder.Entity("HomeHub.Domain.Inventory.InventoryCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("HouseholdId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HouseholdId");
+
+                    b.HasIndex("HouseholdId", "Name")
+                        .IsUnique();
+
+                    b.ToTable("InventoryCategory", (string)null);
+                });
+
+            modelBuilder.Entity("HomeHub.Domain.Inventory.InventoryItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("HouseholdId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("MinimumQuantity")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<int>("Unit")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("HouseholdId", "CategoryId");
+
+                    b.HasIndex("HouseholdId", "Name");
+
+                    b.ToTable("InventoryItem", (string)null);
+                });
+
+            modelBuilder.Entity("HomeHub.Domain.Inventory.LowStockAlert", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("HouseholdId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<decimal>("MinimumQuantity")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<DateTime?>("ResolvedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ResolvedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("TriggeredAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HouseholdId", "ItemId")
+                        .IsUnique()
+                        .HasFilter("\"ResolvedAtUtc\" IS NULL");
+
+                    b.ToTable("LowStockAlert", (string)null);
+                });
+
+            modelBuilder.Entity("HomeHub.Domain.Notices.Notice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ArchivedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("HouseholdId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<DateTime?>("ScheduledForUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Severity")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HouseholdId", "CreatedAtUtc");
+
+                    b.HasIndex("HouseholdId", "IsArchived");
+
+                    b.HasIndex("HouseholdId", "ScheduledForUtc");
+
+                    b.HasIndex("HouseholdId", "Severity");
+
+                    b.ToTable("Notice", (string)null);
+                });
+
+            modelBuilder.Entity("HomeHub.Domain.Tasks.TaskAssignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("AssignedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("TaskItemId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("TaskItemId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("TaskAssignment", (string)null);
+                });
+
+            modelBuilder.Entity("HomeHub.Domain.Tasks.TaskItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CompletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<DateTime?>("DueAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("HouseholdId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HouseholdId", "DueAtUtc");
+
+                    b.HasIndex("HouseholdId", "Status");
+
+                    b.ToTable("TaskItem", (string)null);
+                });
+
             modelBuilder.Entity("HomeHub.Infrastructure.Auth.Entities.RefreshTokenEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -79,6 +369,36 @@ namespace HomeHub.Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId", "IsRevoked");
 
                     b.ToTable("RefreshToken", (string)null);
+                });
+
+            modelBuilder.Entity("HomeHub.Infrastructure.Outbox.OutboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("OccurredAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("PayloadJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("ProcessedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcessedAtUtc");
+
+                    b.ToTable("OutboxMessage", (string)null);
                 });
 
             modelBuilder.Entity("HomeHub.Infrastructure.Persistence.AppUser", b =>
@@ -274,6 +594,44 @@ namespace HomeHub.Infrastructure.Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("HomeHub.Domain.Household.HouseholdMember", b =>
+                {
+                    b.HasOne("HomeHub.Domain.Household.Household", null)
+                        .WithMany()
+                        .HasForeignKey("HouseholdId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HomeHub.Infrastructure.Persistence.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HomeHub.Domain.Inventory.InventoryItem", b =>
+                {
+                    b.HasOne("HomeHub.Domain.Inventory.InventoryCategory", null)
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("HomeHub.Domain.Tasks.TaskAssignment", b =>
+                {
+                    b.HasOne("HomeHub.Domain.Tasks.TaskItem", null)
+                        .WithMany()
+                        .HasForeignKey("TaskItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HomeHub.Infrastructure.Persistence.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("HomeHub.Infrastructure.Auth.Entities.RefreshTokenEntity", b =>

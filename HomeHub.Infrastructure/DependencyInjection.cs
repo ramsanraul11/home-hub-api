@@ -20,13 +20,37 @@
                 .AddSignInManager()
                 .AddEntityFrameworkStores<AppDbContext>();
 
-            //TODO: Adapters (hexagonal)(Extraer a un metodo addServices?)
-            services.AddScoped<IIdentityService, IdentityService>();
-            services.AddScoped<ITokenService, JwtTokenService>();
+            AddServices(services);
 
-            services.AddScoped<IRefreshTokenStore, RefreshTokenStore>();
+            AddStores(services);
+
+            AddRepositories(services);
 
             return services;
+        }
+
+        private static void AddRepositories(IServiceCollection services)
+        {
+            services.AddScoped<IHouseholdRepository, HouseholdRepository>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddScoped<INoticeRepository, NoticeRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<ILowStockAlertRepository, LowStockAlertRepository>();
+        }
+
+        private static void AddStores(IServiceCollection services)
+        {
+            services.AddScoped<IRefreshTokenStore, RefreshTokenStore>();
+        }
+
+        private static void AddServices(IServiceCollection services)
+        {
+            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<ITokenService, JwtTokenService>();
+            services.AddScoped<IUserLookup, UserLookup>();
+
+            //Background services
+            services.AddHostedService<OutboxProcessorHostedService>();
         }
     }
 }
