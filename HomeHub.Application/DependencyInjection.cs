@@ -23,6 +23,11 @@
             services.AddScoped<ArchiveNoticeHandler>();
             services.AddScoped<GetNoticeHandler>();
             services.AddScoped<UpdateNoticeHandler>();
+            services.AddScoped<CreateCategoryHandler>();
+            services.AddScoped<CreateItemHandler>();
+            services.AddScoped<ListCategoriesHandler>();
+            services.AddScoped<ListItemsHandler>();
+            services.AddScoped<UpdateItemQuantityHandler>();
             return services;
         }
     }

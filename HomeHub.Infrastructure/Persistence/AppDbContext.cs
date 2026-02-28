@@ -9,6 +9,8 @@
         public DbSet<TaskItem> Tasks => Set<TaskItem>();
         public DbSet<TaskAssignment> TaskAssignments => Set<TaskAssignment>();
         public DbSet<Notice> Notices => Set<Notice>();
+        public DbSet<InventoryCategory> InventoryCategories => Set<InventoryCategory>();
+        public DbSet<InventoryItem> InventoryItems => Set<InventoryItem>();
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

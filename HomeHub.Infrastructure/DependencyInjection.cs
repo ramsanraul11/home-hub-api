@@ -34,6 +34,7 @@
             services.AddScoped<IHouseholdRepository, HouseholdRepository>();
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<INoticeRepository, NoticeRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
         }
 
         private static void AddStores(IServiceCollection services)
