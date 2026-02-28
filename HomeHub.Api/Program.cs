@@ -1,3 +1,6 @@
+using HomeHub.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // --------------------
@@ -37,7 +40,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("dev", p =>
-        p.AllowAnyOrigin() 
+        p.AllowAnyOrigin()
          .AllowAnyHeader()
          .AllowAnyMethod());
     // .AllowCredentials() <-- ELIMINA esta línea si usas AllowAnyOrigin
@@ -89,6 +92,31 @@ var app = builder.Build();
 // --------------------
 // Pipeline
 // --------------------
+if (!app.Environment.IsDevelopment())
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var env = services.GetRequiredService<IHostEnvironment>();
+        var logger = services.GetRequiredService<ILoggerFactory>().CreateLogger("DbMigrator");
+
+        try
+        {
+            var db = services.GetRequiredService<AppDbContext>();
+
+            // Aplica migrations pendientes
+            logger.LogInformation("Applying EF migrations...");
+            await db.Database.MigrateAsync();
+            logger.LogInformation("EF migrations applied.");
+        }
+        catch (Exception ex)
+        {
+            // En producción puedes decidir si quieres "fallar" el arranque o no.
+            logger.LogError(ex, "An error occurred while applying EF migrations.");
+            throw; // recomendado: si falla migración, que no levante la app
+        }
+    }
+}
 
 // Swagger
 app.UseSwagger(c =>
