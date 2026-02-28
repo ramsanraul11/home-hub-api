@@ -36,6 +36,7 @@
             services.AddScoped<INoticeRepository, NoticeRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<ILowStockAlertRepository, LowStockAlertRepository>();
+            services.AddScoped<IShoppingRepository, ShoppingRepository>();
         }
 
         private static void AddStores(IServiceCollection services)

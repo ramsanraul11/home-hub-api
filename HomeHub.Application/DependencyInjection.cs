@@ -31,6 +31,15 @@
             services.AddScoped<LowStockAlertProjector>();
             services.AddScoped<ListLowStockAlertsHandler>();
             services.AddScoped<ResolveLowStockAlertHandler>();
+            services.AddScoped<CreateShoppingListHandler>();
+            services.AddScoped<ListShoppingListsHandler>();
+            services.AddScoped<ArchiveShoppingListHandler>();
+            services.AddScoped<AddShoppingItemHandler>();
+            services.AddScoped<ListShoppingItemsHandler>();
+            services.AddScoped<MarkBoughtHandler>();
+            services.AddScoped<UnmarkBoughtHandler>();
+            services.AddScoped<DeleteShoppingItemHandler>();
+
             return services;
         }
     }
