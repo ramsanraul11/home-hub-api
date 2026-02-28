@@ -9,9 +9,9 @@
         public Guid HouseholdId { get; private set; }
         public Guid UserId { get; private set; }
         public HouseholdRole Role { get; private set; }
-        public MemberStatus Status { get; private set; }
-        public DateTime JoinedAtUtc { get; private set; }
-        public DateTime? LeftAtUtc { get; private set; }
+        public MemberStatus Status { get; set; }
+        public DateTime JoinedAtUtc { get; set; }
+        public DateTime? LeftAtUtc { get; set; }
 
         private HouseholdMember() { } // EF
 

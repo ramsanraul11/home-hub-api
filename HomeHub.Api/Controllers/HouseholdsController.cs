@@ -46,5 +46,25 @@
             var res = await handler.Handle(householdId, actorUserId, cmd, ct);
             return res.IsSuccess ? Ok(res.Value) : BadRequest(res.Error);
         }
+        [HttpGet("{householdId:guid}/members")]
+        [Authorize(Policy = "HouseholdMember")]
+        public async Task<IActionResult> ListMembers([FromRoute] Guid householdId, [FromServices] ListMembersHandler handler, CancellationToken ct)
+        {
+            var list = await handler.Handle(householdId, ct);
+            return Ok(list);
+        }
+
+        [HttpDelete("{householdId:guid}/members/{memberId:guid}")]
+        [Authorize(Policy = "HouseholdAdminOrOwner")]
+        public async Task<IActionResult> RemoveMember(
+            [FromRoute] Guid householdId,
+            [FromRoute] Guid memberId,
+            [FromServices] RemoveMemberHandler handler,
+            CancellationToken ct)
+        {
+            var actorUserId = CurrentUser.GetUserId(User);
+            var res = await handler.Handle(householdId, actorUserId, memberId, ct);
+            return res.IsSuccess ? NoContent() : BadRequest(res.Error);
+        }
     }
 }

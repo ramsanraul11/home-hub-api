@@ -51,5 +51,24 @@
         public Task<bool> MemberExistsAsync(Guid householdId, Guid userId, CancellationToken ct)
             => _db.HouseholdMembers.AsNoTracking()
                 .AnyAsync(x => x.HouseholdId == householdId && x.UserId == userId && x.Status == MemberStatus.Active, ct);
+
+        public async Task<IReadOnlyList<(Guid MemberId, Guid UserId, HouseholdRole Role)>>
+            GetActiveMembersAsync(Guid householdId, CancellationToken ct)
+        {
+            return await _db.HouseholdMembers
+                .AsNoTracking()
+                .Where(x => x.HouseholdId == householdId && x.Status == MemberStatus.Active)
+                .Select(x => new ValueTuple<Guid, Guid, HouseholdRole>(x.Id, x.UserId, x.Role))
+                .ToListAsync(ct);
+        }
+
+        public async Task RemoveMemberAsync(Guid memberId, CancellationToken ct)
+        {
+            var member = await _db.HouseholdMembers.FirstOrDefaultAsync(x => x.Id == memberId, ct);
+            if (member is null) return;
+
+            member.Status = MemberStatus.Removed;
+            member.LeftAtUtc = DateTime.UtcNow;
+        }
     }
 }

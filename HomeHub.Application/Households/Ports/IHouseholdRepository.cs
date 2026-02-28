@@ -12,5 +12,8 @@
         Task SaveChangesAsync(CancellationToken ct);
         Task<HouseholdRole?> GetRoleForUserAsync(Guid householdId, Guid userId, CancellationToken ct);
         Task<bool> MemberExistsAsync(Guid householdId, Guid userId, CancellationToken ct);
+        Task<IReadOnlyList<(Guid MemberId, Guid UserId, HouseholdRole Role)>> GetActiveMembersAsync(Guid householdId, CancellationToken ct);
+
+        Task RemoveMemberAsync(Guid memberId, CancellationToken ct);
     }
 }
