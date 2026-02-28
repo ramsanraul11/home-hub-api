@@ -8,7 +8,7 @@
         public DbSet<HouseholdMember> HouseholdMembers => Set<HouseholdMember>();
         public DbSet<TaskItem> Tasks => Set<TaskItem>();
         public DbSet<TaskAssignment> TaskAssignments => Set<TaskAssignment>();
-
+        public DbSet<Notice> Notices => Set<Notice>();
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

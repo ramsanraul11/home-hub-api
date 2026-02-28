@@ -18,6 +18,9 @@
             services.AddScoped<ListTasksHandler>();
             services.AddScoped<AssignTaskHandler>();
             services.AddScoped<CompleteTaskHandler>();
+            services.AddScoped<CreateNoticeHandler>();
+            services.AddScoped<ListNoticesHandler>();
+            services.AddScoped<ArchiveNoticeHandler>();
             return services;
         }
     }
