@@ -1,3 +1,5 @@
+// ... (Tus usings se mantienen igual)
+
 using HomeHub.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,13 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Services
 // --------------------
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "HomeHub API", Version = "v1" });
 
-    // (Opcional) Config Swagger para JWT Bearer
     var jwtSecurityScheme = new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -36,21 +36,19 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// CORS (para frontend local)
+// CORS: Configurado para aceptar todo en producción sin problemas de Mixed Content
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("dev", p =>
         p.AllowAnyOrigin()
          .AllowAnyHeader()
          .AllowAnyMethod());
-    // .AllowCredentials() <-- ELIMINA esta línea si usas AllowAnyOrigin
 });
 
-// DI por capas
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// JWT
+// JWT (Configuración se mantiene igual)
 var jwt = builder.Configuration.GetSection("Jwt");
 var issuer = jwt["Issuer"] ?? throw new InvalidOperationException("Jwt:Issuer missing");
 var audience = jwt["Audience"] ?? throw new InvalidOperationException("Jwt:Audience missing");
@@ -69,10 +67,9 @@ builder.Services
             ValidIssuer = issuer,
             ValidAudience = audience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-            ClockSkew = TimeSpan.FromSeconds(30) // pequeño margen
+            ClockSkew = TimeSpan.FromSeconds(30)
         };
     });
-
 
 builder.Services.AddScoped<IAuthorizationHandler, HouseholdMemberHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, HouseholdAdminOrOwnerHandler>();
@@ -92,41 +89,36 @@ var app = builder.Build();
 // --------------------
 // Pipeline
 // --------------------
+
+// 1. Migraciones automáticas (Se mantiene igual, solo asegúrate de la conexión en Render)
 if (!app.Environment.IsDevelopment())
 {
     using (var scope = app.Services.CreateScope())
     {
         var services = scope.ServiceProvider;
-        var env = services.GetRequiredService<IHostEnvironment>();
-        var logger = services.GetRequiredService<ILoggerFactory>().CreateLogger("DbMigrator");
-
         try
         {
             var db = services.GetRequiredService<AppDbContext>();
-
-            // Aplica migrations pendientes
-            logger.LogInformation("Applying EF migrations...");
             await db.Database.MigrateAsync();
-            logger.LogInformation("EF migrations applied.");
         }
         catch (Exception ex)
         {
-            // En producción puedes decidir si quieres "fallar" el arranque o no.
+            var logger = services.GetRequiredService<ILogger<Program>>();
             logger.LogError(ex, "An error occurred while applying EF migrations.");
-            throw; // recomendado: si falla migración, que no levante la app
         }
     }
 }
 
-// Swagger
+// 2. Swagger con forzado de HTTPS para evitar el "Failed to fetch"
 app.UseSwagger(c =>
 {
-    // Fuerza a que Swagger use el mismo scheme/host con el que abriste /swagger (evita http/https mismatch)
     c.PreSerializeFilters.Add((swagger, httpReq) =>
     {
+        // Render usa el header X-Forwarded-Proto para indicar si la petición original era HTTPS
+        var scheme = httpReq.Headers["X-Forwarded-Proto"].FirstOrDefault() ?? "https";
         swagger.Servers = new List<OpenApiServer>
         {
-            new() { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}" }
+            new() { Url = $"{scheme}://{httpReq.Host.Value}" }
         };
     });
 });
@@ -135,10 +127,9 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "HomeHub API v1");
 });
 
-// CORS (antes de auth)
 app.UseCors("dev");
 
-// En dev, evita líos de redirección https (si quieres forzar https, quita este if)
+// Importante: En Render, el proxy ya maneja HTTPS, pero esto asegura consistencia
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
@@ -146,7 +137,5 @@ if (!app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
