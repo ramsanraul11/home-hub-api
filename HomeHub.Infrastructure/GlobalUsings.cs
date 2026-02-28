@@ -18,6 +18,7 @@ global using HomeHub.Domain.Inventory;
 global using HomeHub.Domain.Inventory.Events;
 global using HomeHub.Domain.Notices;
 global using HomeHub.Domain.Shopping;
+global using HomeHub.Domain.Shopping.Events;
 global using HomeHub.Domain.Tasks;
 global using HomeHub.Infrastructure.Auth;
 global using HomeHub.Infrastructure.Auth.Entities;

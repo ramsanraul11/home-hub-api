@@ -48,7 +48,7 @@ namespace HomeHub.Infrastructure.Persistence
                 {
                     Id = Guid.NewGuid(),
                     OccurredAtUtc = ev.OccurredAtUtc,
-                    Type = ev.GetType().FullName!,
+                    Type = ev.GetType().AssemblyQualifiedName!,
                     PayloadJson = JsonSerializer.Serialize(ev, ev.GetType())
                 });
             }

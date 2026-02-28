@@ -10,17 +10,10 @@
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // simple loop
             while (!stoppingToken.IsCancellationRequested)
             {
-                try
-                {
-                    await ProcessBatch(stoppingToken);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Outbox processing failed");
-                }
+                try { await ProcessBatch(stoppingToken); }
+                catch (Exception ex) { _logger.LogError(ex, "Outbox processing failed"); }
 
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }
@@ -30,7 +23,7 @@
         {
             using var scope = _scopeFactory.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            var projector = scope.ServiceProvider.GetRequiredService<LowStockAlertProjector>();
+            var handlers = scope.ServiceProvider.GetServices<IOutboxEventHandler>().ToList();
 
             var batch = await db.OutboxMessages
                 .Where(x => x.ProcessedAtUtc == null)
@@ -44,12 +37,17 @@
             {
                 try
                 {
-                    if (msg.Type == typeof(LowStockTriggered).FullName)
+                    var handler = FindHandler(handlers, msg.Type);
+
+                    if (handler is null)
                     {
-                        var ev = JsonSerializer.Deserialize<LowStockTriggered>(msg.PayloadJson);
-                        if (ev is not null)
-                            await projector.ProjectAsync(ev, ct);
+                        // Estrategia: marcar como procesado para que no bloquee (queda trazabilidad)
+                        msg.ProcessedAtUtc = DateTime.UtcNow;
+                        msg.Error = $"No handler for type: {msg.Type}";
+                        continue;
                     }
+
+                    await handler.HandleAsync(msg.PayloadJson, ct);
 
                     msg.ProcessedAtUtc = DateTime.UtcNow;
                     msg.Error = null;
@@ -57,13 +55,27 @@
                 catch (Exception ex)
                 {
                     msg.Error = ex.Message;
-                    // No marcamos ProcessedAtUtc para reintentar, o si prefieres evitar bucles,
-                    // puedes marcarlo procesado con error y reintentar manualmente.
-                    _logger.LogError(ex, "Error processing outbox message {Id}", msg.Id);
+                    _logger.LogError(ex, "Error processing outbox message {Id} type={Type}", msg.Id, msg.Type);
+
+                    // Estrategia: NO marcar ProcessedAtUtc para reintentar.
+                    // Si prefieres evitar loops, marca procesado con error.
                 }
             }
 
             await db.SaveChangesAsync(ct);
         }
+
+        private static IOutboxEventHandler? FindHandler(List<IOutboxEventHandler> handlers, string typeName)
+        {
+            // match exact (AssemblyQualifiedName)
+            var h = handlers.FirstOrDefault(x => x.EventType == typeName);
+            if (h is not null) return h;
+
+            // fallback por si en DB quedó FullName
+            return handlers.FirstOrDefault(x =>
+                x.EventType.Contains(typeName, StringComparison.Ordinal));
+        }
     }
 }
+
+
