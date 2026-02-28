@@ -36,12 +36,18 @@
 
         public static Notice Create(Guid householdId, string title, string? message, NoticeSeverity severity, DateTime? scheduledForUtc, Guid createdByUserId)
             => new(Guid.NewGuid(), householdId, title.Trim(), message, severity, scheduledForUtc, createdByUserId);
-
         public void Archive()
         {
             if (IsArchived) return;
             IsArchived = true;
             ArchivedAtUtc = DateTime.UtcNow;
+        }
+        public void Update(string title, string? message, NoticeSeverity severity, DateTime? scheduledForUtc)
+        {
+            Title = title.Trim();
+            Message = message;
+            Severity = severity;
+            ScheduledForUtc = scheduledForUtc;
         }
     }
 }

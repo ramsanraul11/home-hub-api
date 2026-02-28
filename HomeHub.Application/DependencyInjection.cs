@@ -21,6 +21,8 @@
             services.AddScoped<CreateNoticeHandler>();
             services.AddScoped<ListNoticesHandler>();
             services.AddScoped<ArchiveNoticeHandler>();
+            services.AddScoped<GetNoticeHandler>();
+            services.AddScoped<UpdateNoticeHandler>();
             return services;
         }
     }

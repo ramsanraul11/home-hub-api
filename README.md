@@ -24,8 +24,8 @@
 - [x] Auditoría básica (CreatedAt/By)
 
 ### Fase 3 — Avisos (MVP)
-- [ ] CRUD Notice (por hogar)
-- [ ] Archivado + filtros por urgencia/fecha
+- [x] CRUD Notice (por hogar)
+- [x] Archivado + filtros por urgencia/fecha
 
 ### Fase 4 — Compra/Inventario (MVP)
 - [ ] Inventory: categorías + items + stock mínimo

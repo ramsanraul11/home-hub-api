@@ -5,9 +5,9 @@
         private readonly INoticeRepository _repo;
         public ArchiveNoticeHandler(INoticeRepository repo) => _repo = repo;
 
-        public async Task<Result> Handle(Guid noticeId, CancellationToken ct)
+        public async Task<Result> Handle(Guid houseHoldId, Guid noticeId, CancellationToken ct)
         {
-            var notice = await _repo.GetByIdAsync(noticeId, ct);
+            var notice = await _repo.GetByIdAsync(houseHoldId, noticeId, ct);
             if (notice is null)
                 return Result.Fail("notice.not_found", "Notice not found.");
 

@@ -11,8 +11,14 @@
             return Task.CompletedTask;
         }
 
-        public Task<Notice?> GetByIdAsync(Guid noticeId, CancellationToken ct)
-            => _db.Notices.FirstOrDefaultAsync(x => x.Id == noticeId, ct);
+        public Task DeleteAsync(Notice notice, CancellationToken ct)
+        {
+            _db.Notices.Remove(notice);
+            return Task.CompletedTask;
+        }
+
+        public Task<Notice?> GetByIdAsync(Guid houseHoldId, Guid noticeId, CancellationToken ct)
+            => _db.Notices.FirstOrDefaultAsync(x => x.Id == noticeId && x.HouseholdId == houseHoldId, ct);
 
         public async Task<IReadOnlyList<Notice>> ListAsync(
             Guid householdId,
