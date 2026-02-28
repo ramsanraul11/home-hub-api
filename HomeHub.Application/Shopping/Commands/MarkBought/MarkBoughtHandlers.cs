@@ -22,13 +22,13 @@
         private readonly IShoppingRepository _repo;
         public UnmarkBoughtHandler(IShoppingRepository repo) => _repo = repo;
 
-        public async Task<Result> Handle(Guid householdId, Guid itemId, CancellationToken ct)
+        public async Task<Result> Handle(Guid householdId, Guid itemId, Guid userId, CancellationToken ct)
         {
             var item = await _repo.GetItemAsync(householdId, itemId, ct);
             if (item is null)
                 return Result.Fail("shopping.item_not_found", "Item not found.");
 
-            item.UnmarkBought();
+            item.UnmarkBought(userId);
             await _repo.SaveChangesAsync(ct);
             return Result.Ok();
         }

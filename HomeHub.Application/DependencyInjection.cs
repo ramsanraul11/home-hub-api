@@ -1,4 +1,7 @@
-﻿namespace HomeHub.Application
+﻿using HomeHub.Application.Shopping.Commands.UpdateShoppingItem;
+using HomeHub.Application.Shopping.Commands.UpdateShoppingList;
+
+namespace HomeHub.Application
 {
     public static class DependencyInjection
     {
@@ -39,6 +42,8 @@
             services.AddScoped<MarkBoughtHandler>();
             services.AddScoped<UnmarkBoughtHandler>();
             services.AddScoped<DeleteShoppingItemHandler>();
+            services.AddScoped<UpdateShoppingListHandler>();
+            services.AddScoped<UpdateShoppingItemHandler>();
 
             return services;
         }

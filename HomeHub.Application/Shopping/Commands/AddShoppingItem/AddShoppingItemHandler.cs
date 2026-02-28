@@ -22,7 +22,7 @@
                 return Result<ShoppingListItemDto>.Fail("shopping.quantity_invalid", "Quantity must be > 0.");
 
             var item = ShoppingListItem.Create(householdId, listId, name, cmd.Quantity, cmd.Notes, userId);
-
+            item.RaiseAdded(userId);
             await _repo.AddItemAsync(item, ct);
             await _repo.SaveChangesAsync(ct);
 
