@@ -37,10 +37,10 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("dev", p =>
-        p.WithOrigins("http://localhost:3000")
+        p.AllowAnyOrigin() 
          .AllowAnyHeader()
-         .AllowAnyMethod()
-         .AllowCredentials());
+         .AllowAnyMethod());
+    // .AllowCredentials() <-- ELIMINA esta línea si usas AllowAnyOrigin
 });
 
 // DI por capas
